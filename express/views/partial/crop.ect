@@ -1,0 +1,53 @@
+            <div class="tablePanel">
+                <form action="{{commitActionName}}" method="post" id="post" name="post">
+                    <input type="hidden" name="imageId" value="{{targetId}}" />
+                    <table id="imageTable" class="table table-bordered table-condensed image">
+                        <thead>
+                            <tr>
+                                <th ng-if="!isTpl">base image name</th>
+                                <th>size</th>
+                                <th>preview</th>
+                                <th class="position">central coordinate</th>
+                                <th class="position">output image name</th>
+                                <th class="position">options<br>(<a href="http://www.imagemagick.org/script/command-line-options.php" target="_blank">official doc</a>)</th>
+                                <th class="position" ng-if="!isTpl">actual output file</th>
+                                <th class="position"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="base_position" ng-click="setSelectedSizeAll()" ng-class="{selected: isAllSelectMode()}">
+                                <td>bulk edit</td>
+                                <td ng-if="!isTpl">-</td>
+                                <td>-</td>
+                                <td>(<span id="base_x"></span>, <span id="base_y"></span>)</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td ng-if="!isTpl">-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr ng-repeat="image in imageData" id="{{image.key}}" ng-click="setSelectedSize(image.key)" ng-class="{selected: selectedSize == image.key}" ng-cloak>
+                                <td ng-if="!isTpl"><input type="text" name="{{image.key}}[base]" value={{image.base}} readonly/></td>
+                                <td class="sizeSelect">
+                                    <p><span>width:</span><input type="number" name="{{image.key}}[width]" value="{{image.width}}" class="changeable" /></P>
+                                    <p><span>height:</span><input type="number" name="{{image.key}}[height]" value="{{image.height}}" class="changeable" /></p>
+                                    <p><input type="checkbox" id="{{image.key}}_keepAsp" checked>fix aspect ratio</p>
+                                </td>
+                                <td>
+                                    <p id="{{image.key}}_frame">
+                                        <canvas id="{{image.key}}_prev"></canvas>
+                                    </p>
+                                </td>
+                                <td class="sizeSelect">
+                                    <p><span>X:</span><input type="number" name="{{image.key}}[x]" value={{image.center.x}} class="changeable" /></p>
+                                    <p><span>Y:</span><input type="number" name="{{image.key}}[y]" value={{image.center.y}} class="changeable" /></p>
+                                </td>
+                                <td><input type="text" name="{{image.key}}[output]" value={{image.output}} /></td>
+                                <td><input type="text" name="{{image.key}}[option]" value={{image.option}} class="changeable"/></td>
+                                <td ng-if="!isTpl"><img ng-src={{image.url}} /><p><span>{{image.size}}</span></p></td>
+                                <td><button class="btn" type="button" ng-click="deleteSize(image.key)">delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <p class="btnAddSize"><button class="btn btn-primary" ng-click="addSize();">add new crop setting</button></p>

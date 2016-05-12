@@ -1,0 +1,139 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+body {
+    padding: 20px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+body > div {
+    height: 100%;
+}
+.mainPanel {
+    margin: 0 auto;
+    height: 100%;
+    min-height: 100%;
+    margin-top: 50px;
+}
+.mainPanel .leftPanel {
+    max-width: 40%;
+    float: left;
+}
+.mainPanel .rightPanel {
+    float: right;
+    overflow-y: scroll;
+    width: 56%;
+    height: 86%;
+}
+.btnAddSize {
+    text-align: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.xy {
+    position: absolute;
+    display: none;
+    z-index: 10;
+}
+.xy > li {
+    list-style: none;
+    width: 150px;
+    float: left;
+}
+
+.imgWrapper {
+    position: relative;
+}
+.imgWrapper canvas {
+    position: absolute;
+    top: 0px;
+}
+.imgWrapper img {
+    z-index: -1;
+    top: 0px;
+    border: 2px #000000 solid;
+}
+div#imageUploader {
+    position: static;
+    margin-top: 20px;
+}
+
+li.ng-isolate-scope {
+    width: 80px;
+}
+li.ng-isolate-scope a {
+    width: 80px;
+    white-spce: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+li.ng-isolate-scope.active {
+    width: 200px;
+}
+li.ng-isolate-scope.active a {
+    width: 200px;
+}
+
+/* TABLE */
+table#imageTable {
+    width: 100%;
+    margin-bottom: 0px;
+    font: 80%/150% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Lucida, Helvetica, sans-serif;
+}
+/* HEADER */
+thead {
+    background-color: #f8f8f8;
+}
+thead tr th {
+    padding: 1em 0;
+    text-align: center;
+    font-size: 12px;
+}
+thead tr th.position {
+    max-width: 100px;
+}
+tbody {
+    cursor: pointer;
+}
+/* BODY */
+tbody tr.selected {
+    background-color: #428bca;
+}
+tbody tr td.sizeSelect p {
+    text-align: right;
+}
+tbody tr td.sizeSelect input {
+    max-width: 50px;
+}
+tbody tr td p {
+    position: relative;
+}
+tbody tr td p img {
+    position: absolute;
+}
+tbody tr td input {
+    max-width: 80px;
+}
+tbody tr:hover {
+    background: #8db9df;
+}
+tbody tr th, tbody tr td {
+    padding: 0.1em 0.4em;
+}
+tbody tr th {
+    padding-right: 1em;
+    text-align: right;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+.navbar-form .form-control {
+    width: 300px;
+}
+#idListCtrl ul {
+    cursor: pointer;
+}

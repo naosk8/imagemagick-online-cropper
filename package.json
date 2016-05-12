@@ -1,0 +1,24 @@
+{
+  "name": "test-imagemagick",
+  "version": "0.0.1",
+  "description": "package for imagemagick test",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "npm install -g forever",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/naosk8/test-imagemagick.git",
+  "author": "",
+  "license": "BSD",
+  "devDependencies": {
+    "express": "~4.0.0",
+    "grunt": "~0.4.4",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-execute": "~0.1.5",
+    "grunt-express-server": "~0.4.13",
+    "grunt-image": "0.7.*",
+    "promise": "~5.0.0",
+    "underscore": "~1.6.0"
+  }
+}

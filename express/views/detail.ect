@@ -1,0 +1,25 @@
+<% extend 'layout' %>
+<script type="text/javascript" src="js/detail.js" ></script>
+<div ng-app="imageCropper" id="mainCtrl" ng-controller="mainCtrl">
+    <% include 'partial/header.ect' %>
+    <div class="mainPanel">
+        <div class="leftPanel" ng-cloak>
+            <% include 'partial/target.ect' %>
+            <div id="imageUploader">
+                <form enctype="multipart/form-data" action="/api/image/upload" method="post">
+                    <input type="hidden" name="imageId" value="{{targetId}}" />
+                    <input id="uploadFileName" type="file" name="{{targetId}}" />
+                    <img id="uploadPreview" src="" />
+                    <p><button class="btn btn-primary" type="submit">upload</button></p>
+                </form>
+            </div>
+        </div>
+        <div class="rightPanel" id="imageDataCtrl" ng-controller="imageDataCtrl" ng-show="isShow()">
+            <% include 'partial/crop.ect' %>
+        </div>
+        <div class="xy">
+            (<span id="onmouseX"></span>, <span id="onmouseY"></span>)
+        </div>
+    </div>
+    <% include 'partial/modal.ect' %>
+</div>

@@ -1,0 +1,64 @@
+{
+    "1": {
+        "0": {
+            "base": "look11.jpg",
+            "output": "0000.png",
+            "x": 36,
+            "y": 3.5,
+            "width": 300,
+            "height": 185,
+            "option": "-resize 300x185 -unsharp 2x1.4+0.5+0",
+            "key": "0",
+            "url": "/img/dest/1/0000.png",
+            "size": "43.2KB"
+        },
+        "1": {
+            "base": "look11.jpg",
+            "output": "0001.png",
+            "x": 33,
+            "y": 24.5,
+            "width": 300,
+            "height": 75,
+            "option": "-resize 300x75 -unsharp 2x1.4+0.5+0",
+            "key": "1",
+            "url": "/img/dest/1/0001.png",
+            "size": "19.2KB"
+        },
+        "2": {
+            "base": "look11.jpg",
+            "output": "0002.png",
+            "x": 36,
+            "y": 7,
+            "width": 300,
+            "height": 300,
+            "option": "-resize 300x300 -unsharp 2x1.4+0.5+0",
+            "key": "2",
+            "url": "/img/dest/1/0002.png",
+            "size": "67KB"
+        },
+        "3": {
+            "base": "look11.jpg",
+            "output": "0003.png",
+            "x": 83,
+            "y": 6,
+            "width": 200,
+            "height": 300,
+            "option": "-resize 200x300 -unsharp 2x1.4+0.5+0",
+            "key": "3",
+            "url": "/img/dest/1/0003.png",
+            "size": "46KB"
+        },
+        "4": {
+            "base": "look11.jpg",
+            "output": "0004.png",
+            "x": 81,
+            "y": 11,
+            "width": 200,
+            "height": 300,
+            "option": "-resize 100x150 -unsharp 2x1.4+0.5+0 -colorspace gray",
+            "key": "4",
+            "url": "/img/dest/1/0004.png",
+            "size": "14.9KB"
+        }
+    }
+}

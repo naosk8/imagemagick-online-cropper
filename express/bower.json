@@ -1,0 +1,25 @@
+{
+  "name": "imagemagick-online-cropper",
+  "description": "",
+  "main": "",
+  "authors": [
+    "naosk8"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/naosk8/imagemagick-online-cropper",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.1",
+    "jquery": "^2.2.3",
+    "underscore": "^1.8.3",
+    "angular-ui-bootstrap-bower": "0.13.0",
+    "bootstrap": "^3.3.6"
+  }
+}

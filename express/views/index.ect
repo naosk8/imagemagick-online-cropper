@@ -1,0 +1,13 @@
+<% extend 'layout' %>
+<script type="text/javascript" src="js/index.js" ></script>
+<div ng-app="index" ng-controller="idListCtrl" >
+    <% include 'partial/header.ect' %>
+    <div class="mainPanel">
+        <div id="idListCtrl" ng-show="show">
+            <h4>image ID list</h2>
+            <ul>
+                <li ng-repeat="id in idList" ><a ng-href="/detail?id={{id}}">{{id}}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
