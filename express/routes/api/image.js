@@ -52,7 +52,7 @@ exports.init = function(req, res){
             var baseFileName = files[0];
             var imageObjPerSize = new Object();
             imageObjPerSize.base    = baseFileName;
-            imageObjPerSize.output  = imageMaster.sizeDetail[key]['outputFileName'];
+            imageObjPerSize.output  = imageMaster.sizeDetail[key]['output'];
             imageObjPerSize.x       = imageMaster.sizeDetail[key]['defaultX'];
             imageObjPerSize.y       = imageMaster.sizeDetail[key]['defaultY'];
             imageObjPerSize.width   = imageMaster.sizeDetail[key]['width'];
@@ -223,18 +223,18 @@ exports.commit = function(req, res){
     delete req.body.imageId;
     console.log(req.body);
     // json の更新処理
+    var imageDataPerId = {};
     for (key in req.body) {
-        if (!imageData[imageId][key]) {
-            imageData[imageId][key] = new Object();
-        }
-        imageData[imageId][key]['base'] = req.body[key]['base'];
-        imageData[imageId][key]['width'] = parseInt(req.body[key]['width'], 10);
-        imageData[imageId][key]['height'] = parseInt(req.body[key]['height'], 10);
-        imageData[imageId][key]['x'] = parseInt(req.body[key]['x'], 10) - (imageData[imageId][key]['width'] / 2);
-        imageData[imageId][key]['y'] = parseInt(req.body[key]['y'], 10) - (imageData[imageId][key]['height'] / 2);
-        imageData[imageId][key]['output'] = req.body[key]['output'];
-        imageData[imageId][key]['option'] = (req.body[key]['option']) ? req.body[key]['option'] : null;
+        imageDataPerId[key] = new Object();
+        imageDataPerId[key]['base'] = req.body[key]['base'];
+        imageDataPerId[key]['width'] = parseInt(req.body[key]['width'], 10);
+        imageDataPerId[key]['height'] = parseInt(req.body[key]['height'], 10);
+        imageDataPerId[key]['x'] = parseInt(req.body[key]['x'], 10) - (imageDataPerId[key]['width'] / 2);
+        imageDataPerId[key]['y'] = parseInt(req.body[key]['y'], 10) - (imageDataPerId[key]['height'] / 2);
+        imageDataPerId[key]['output'] = req.body[key]['output'];
+        imageDataPerId[key]['option'] = (req.body[key]['option']) ? req.body[key]['option'] : null;
     }
+    imageData[imageId] = imageDataPerId;
 
     fs.writeFile(jsonFilePath, JSON.stringify(imageData, null, "    "), function (err) {
         console.log(err);
