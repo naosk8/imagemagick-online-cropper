@@ -183,7 +183,7 @@ exports.detail = function(req, res){
 
 exports.download = function(req, res){
     var query = req.query;
-    var destBaseDir = path.join(__dirname, '../../public/img/dest/');
+    var destBaseDir = path.join(__dirname, '../../../img/dest/');
     var outputZipPath = path.join(__dirname, '../../public/download/'+query.imageId+'.zip');
 
     process.chdir(destBaseDir);
