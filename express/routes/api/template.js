@@ -8,7 +8,7 @@ var execSync = require('exec-sync');
 var DEFAULT_WIDTH = 1280;
 var DEFAULT_HEIGHT = 1040;
 
-var SAMPLE_IMAGE_ID = '1';
+var SAMPLE_IMAGE_ID = 'template';
 
 exports.get = function(req, res){
     var imagePath = path.join(__dirname, '../../public/img/org/');

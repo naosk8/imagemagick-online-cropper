@@ -3,46 +3,46 @@
         "0": {
             "id": "0",
             "output": "0001.png",
-            "width": 300,
-            "height": 200,
-            "defaultX": 29,
-            "defaultY": 0,
+            "width": 1500,
+            "height": 1000,
+            "defaultX": 1764,
+            "defaultY": 1269,
             "option": "-resize 300x200 -unsharp 2x1.4+0.5+0"
         },
         "1": {
             "id": "1",
             "output": "0002.png",
-            "width": 200,
+            "width": 600,
             "height": 400,
-            "defaultX": 83,
-            "defaultY": 0,
-            "option": "-resize 200x400 -unsharp 2x1.4+0.5+0"
+            "defaultX": 1876,
+            "defaultY": 1308,
+            "option": "-resize 300x200 -unsharp 2x1.4+0.5+0"
         },
         "2": {
             "id": "2",
             "output": "0003.png",
-            "width": 100,
-            "height": 100,
-            "defaultX": 132,
-            "defaultY": 11,
-            "option": "-resize 86x86 -unsharp 2x1.4+0.5+0"
+            "width": 1000,
+            "height": 1000,
+            "defaultX": 2217,
+            "defaultY": 2130,
+            "option": "-resize 86x86 -unsharp 2x1.4+0.5+0 -flop"
         },
         "3": {
             "id": "3",
             "output": "0004.png",
-            "width": 200,
-            "height": 400,
-            "defaultX": 83,
-            "defaultY": 0,
-            "option": "-resize 200x400 -unsharp 2x1.4+0.5+0"
+            "width": 3000,
+            "height": 2400,
+            "defaultX": 1343,
+            "defaultY": 937,
+            "option": "-resize 500x400 -unsharp 2x1.4+0.5+0"
         },
         "4": {
             "id": "4",
             "output": "0005.png",
             "width": 150,
             "height": 150,
-            "defaultX": 108,
-            "defaultY": 0,
+            "defaultX": 1781,
+            "defaultY": 3010,
             "option": "-resize 86x86 -unsharp 2x1.4+0.5+0 -colorspace gray"
         }
     }

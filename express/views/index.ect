@@ -6,7 +6,7 @@
         <div id="idListCtrl" ng-show="show">
             <h4>image ID list</h2>
             <ul>
-                <li ng-repeat="id in idList" ><a ng-href="/detail?id={{id}}">{{id}}</a></li>
+                <li ng-repeat="id in idList" ><a ng-href="/detail?id={{id}}" ng-cloak>{{id}}</a></li>
             </ul>
         </div>
     </div>

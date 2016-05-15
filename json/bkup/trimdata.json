@@ -1,64 +1,49 @@
 {
-    "1": {
+    "sample": {
         "0": {
-            "base": "look11.jpg",
-            "output": "0000.png",
-            "x": 36,
-            "y": 3.5,
-            "width": 300,
-            "height": 185,
-            "option": "-resize 300x185 -unsharp 2x1.4+0.5+0",
-            "key": "0",
-            "url": "/img/dest/1/0000.png",
-            "size": "43.2KB"
+            "base": "sample.jpg",
+            "width": 1500,
+            "height": 1000,
+            "x": 1764,
+            "y": 1269,
+            "output": "0001.png",
+            "option": "-resize 300x200 -unsharp 2x1.4+0.5+0"
         },
         "1": {
-            "base": "look11.jpg",
-            "output": "0001.png",
-            "x": 33,
-            "y": 24.5,
-            "width": 300,
-            "height": 75,
-            "option": "-resize 300x75 -unsharp 2x1.4+0.5+0",
-            "key": "1",
-            "url": "/img/dest/1/0001.png",
-            "size": "19.2KB"
+            "base": "sample2.jpg",
+            "width": 1200,
+            "height": 800,
+            "x": 1025,
+            "y": 866,
+            "output": "0002.png",
+            "option": "-resize 300x200 -unsharp 2x1.4+0.5+0"
         },
         "2": {
-            "base": "look11.jpg",
-            "output": "0002.png",
-            "x": 36,
-            "y": 7,
-            "width": 300,
-            "height": 300,
-            "option": "-resize 300x300 -unsharp 2x1.4+0.5+0",
-            "key": "2",
-            "url": "/img/dest/1/0002.png",
-            "size": "67KB"
+            "base": "sample.jpg",
+            "width": 1000,
+            "height": 1000,
+            "x": 2217,
+            "y": 2130,
+            "output": "0003.png",
+            "option": "-resize 86x86 -unsharp 2x1.4+0.5+0 -flop"
         },
         "3": {
-            "base": "look11.jpg",
-            "output": "0003.png",
-            "x": 83,
-            "y": 6,
-            "width": 200,
-            "height": 300,
-            "option": "-resize 200x300 -unsharp 2x1.4+0.5+0",
-            "key": "3",
-            "url": "/img/dest/1/0003.png",
-            "size": "46KB"
+            "base": "sample.jpg",
+            "width": 3000,
+            "height": 2400,
+            "x": 1343,
+            "y": 937,
+            "output": "0004.png",
+            "option": "-resize 500x400 -unsharp 2x1.4+0.5+0"
         },
         "4": {
-            "base": "look11.jpg",
-            "output": "0004.png",
-            "x": 81,
-            "y": 11,
-            "width": 200,
-            "height": 300,
-            "option": "-resize 100x150 -unsharp 2x1.4+0.5+0 -colorspace gray",
-            "key": "4",
-            "url": "/img/dest/1/0004.png",
-            "size": "14.9KB"
+            "base": "sample.jpg",
+            "width": 150,
+            "height": 150,
+            "x": 1781,
+            "y": 3010,
+            "output": "0005.png",
+            "option": "-resize 86x86 -unsharp 2x1.4+0.5+0 -colorspace gray"
         }
     }
 }
