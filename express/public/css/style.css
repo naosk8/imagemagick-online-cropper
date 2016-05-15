@@ -59,7 +59,9 @@ div#imageUploader {
     position: static;
     margin-top: 20px;
 }
-
+div#imageUploader * {
+    float: left;
+}
 li.ng-isolate-scope {
     width: 80px;
 }

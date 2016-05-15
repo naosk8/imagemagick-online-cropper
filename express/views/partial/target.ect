@@ -1,5 +1,5 @@
             <div class="baseImagePanel" id="baseImageCtrl" ng-controller="baseImageCtrl" ng-show="isShow()">
-                <button type="button" class="btn btn-success btn-default navbar-btn" ng-click="initBaseImage()">&nbsp;initialize</button>
+                <button type="button" class="btn btn-success btn-default navbar-btn" ng-click="initBaseImage()" ng-show="!isInitialized">&nbsp;initialize</button>
                 <tabset>
                     <tab ng-repeat="image in imageList" heading={{image.name}} active="image.active" ng-click="updateBaseImageIndex($index)">
                         <div class="imgWrapper" id="{{image.name}}">

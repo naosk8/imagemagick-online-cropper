@@ -24,6 +24,8 @@ var wh_relation = {
 var app = angular.module('imageCropper', ['ui.bootstrap']);
 
 app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http, $modal) {
+    $scope.isInitialized = false;
+
     $scope.withSave = true;
     $scope.imageList = [];
     $scope.baseImageIndex = 0;
@@ -315,15 +317,16 @@ function initCanvas() {
     var windowWidth = window.innerWidth;
     // canvasの表示幅を取得
     var canvasWidth = windowWidth * 0.4;
-
+    var maxCanvasHeight = window.innerHeight * 0.7;
     var baseCanvasElements = document.querySelectorAll(".imgWrapper > canvas");
 
     var scope = angular.element('#baseImageCtrl').scope();
     _.each(baseCanvasElements, function(canvas, i) {
         // 縮尺計算
         var scale = canvasWidth / canvas.width;
+        scale = (canvas.height * scale > maxCanvasHeight) ? (maxCanvasHeight / canvas.height) : scale;
         baseImageList[i].scale = scale;
-        baseImageList[i].width = parseInt(canvasWidth, 10);
+        baseImageList[i].width = parseInt(canvas.width * scale, 10);
         baseImageList[i].height = parseInt(canvas.height * scale, 10);
         scope.updateImageList(baseImageList);
         scope.$apply(); // imageListの更新をscope外から実施するため。
@@ -434,9 +437,10 @@ function initData()
                 image.index = key;
                 return image;
             });
-            var scope = angular.element('#baseImageCtrl').scope();
-            scope.updateImageList(baseImageList);
-            scope.updateBaseImageIndex(0);
+            var mainScope = angular.element('#mainCtrl').scope();
+            var baseImageScope = angular.element('#baseImageCtrl').scope();
+            baseImageScope.updateImageList(baseImageList);
+            baseImageScope.updateBaseImageIndex(0);
 
             _.each(parsedRes.imageData, function(data) {
                 // x, y 座標
@@ -446,6 +450,7 @@ function initData()
 
             if (parsedRes.imageData && Object.keys(parsedRes.imageData).length > 0) {
                 setImageData(parsedRes.imageData);
+                mainScope.isInitialized = true;
             }
             initialized = true;
             resolve();

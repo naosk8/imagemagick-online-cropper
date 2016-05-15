@@ -11,5 +11,9 @@ angularAppIDX.controller('idListCtrl', function($scope, $http) {
     });
     $scope.setTargetId = function(id) {
     	$scope.targetId = id;
-    }
+    };
+    $scope.isMenuOpened = false;
+    $scope.onClickMenu = function() {
+        $scope.isMenuOpened = !$scope.isMenuOpened;
+    };
 });
