@@ -1,10 +1,10 @@
-            <div class="baseImagePanel" id="baseImageCtrl" ng-controller="baseImageCtrl" ng-show="isShow()">
+            <div class="ng-hide baseImagePanel" id="baseImageCtrl" ng-controller="baseImageCtrl" ng-show="isShow() || false">
                 <button type="button" class="btn btn-success btn-default navbar-btn" ng-click="initBaseImage()" ng-show="!isInitialized">&nbsp;initialize</button>
                 <tabset>
                     <tab ng-repeat="image in imageList" heading={{image.name}} active="image.active" ng-click="updateBaseImageIndex($index)">
                         <div class="imgWrapper" id="{{image.name}}">
                             <canvas width={{image.width}} height={{image.height}}></canvas>
-                            <img ng-src={{image.url}} width={{image.width}} height={{image.height}} />
+                            <img ng-src={{image.url}} width={{image.width}} height={{image.height}} ng-if="image.ready" />
                         </div>
                     </tab>
                 </tabset>

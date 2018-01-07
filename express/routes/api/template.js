@@ -3,12 +3,12 @@
 */
 var path = require('path');
 var fs = require('fs');
-var execSync = require('exec-sync');
+var execSync = require('child_process').execSync;
 
 var DEFAULT_WIDTH = 1280;
 var DEFAULT_HEIGHT = 1040;
 
-var SAMPLE_IMAGE_ID = 'template';
+var SAMPLE_IMAGE_ID = 'sample';
 
 exports.get = function(req, res){
     var imagePath = path.join(__dirname, '../../public/img/org/');
@@ -28,26 +28,26 @@ exports.get = function(req, res){
             var targetImagePath = imagePath + SAMPLE_IMAGE_ID + "/" + files[i];
             try {
                 command = "identify -format '%w, %h' " + targetImagePath;
-                ret = execSync(command);
+                ret = execSync(command).toString();
             } catch (e) {
                 command = "convert " + targetImagePath + " -strip " + targetImagePath;
                 ret = execSync(command);
                 command = "identify -format '%w, %h' " + targetImagePath;
-                ret = execSync(command);
+                ret = execSync(command).toString();
             }
-            file.width = ret.split(',')[0];
-            file.height = ret.split(',')[1];
+            file.width = parseInt(ret.split(',')[0]);
+            file.height = parseInt(ret.split(',')[1]);
             files[i] = file;
         }
     }
     if (imageData) {
         // added trimmed image data path
         for (var key in imageData) {
-            imageData[key]['base'] = files[0].base;
+            imageData[key]['base'] = SAMPLE_IMAGE_ID + imageData[key]['inputSuffix'] + ".png";
             imageData[key]['key'] = key;
         }
     }
-
+console.log(imageData);
     var variables = {
         imageData: imageData,
         isImageExists: true,
@@ -70,7 +70,7 @@ exports.commit = function(req, res){
     for (key in req.body) {
         newTemplate[key] = new Object();
         newTemplate[key]['id'] = key;
-        newTemplate[key]['inputFileSuffix'] = req.body[key]['base'];
+        newTemplate[key]['inputSuffix'] = req.body[key]['inputSuffix'];
         newTemplate[key]['output'] = req.body[key]['output'];
         newTemplate[key]['width'] = parseInt(req.body[key]['width'], 10);
         newTemplate[key]['height'] = parseInt(req.body[key]['height'], 10);

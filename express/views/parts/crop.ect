@@ -1,10 +1,10 @@
-            <div class="tablePanel">
+            <div class="tablePanel" ng-cloak>
                 <form action="{{commitActionName}}" method="post" id="post" name="post">
                     <input type="hidden" name="imageId" value="{{targetId}}" />
                     <table id="imageTable" class="table table-bordered table-condensed image">
                         <thead>
                             <tr>
-                                <th ng-if="!isTpl">base image name</th>
+                                <th>base image name</th>
                                 <th>size</th>
                                 <th>preview</th>
                                 <th class="position">central coordinate</th>
@@ -15,9 +15,10 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!--
                             <tr id="base_position" ng-click="setSelectedSizeAll()" ng-class="{selected: isAllSelectMode()}">
                                 <td>bulk edit</td>
-                                <td ng-if="!isTpl">-</td>
+                                <td>-</td>
                                 <td>-</td>
                                 <td>(<span id="base_x"></span>, <span id="base_y"></span>)</td>
                                 <td>-</td>
@@ -25,11 +26,13 @@
                                 <td ng-if="!isTpl">-</td>
                                 <td>-</td>
                             </tr>
-                            <tr ng-repeat="image in imageData" id="{{image.key}}" ng-click="setSelectedSize(image.key)" ng-class="{selected: selectedSize == image.key}" ng-cloak>
+                            -->
+                            <tr ng-repeat="image in imageData" id="{{image.key}}" ng-click="setSelectedSize(image.key, image.base)" ng-class="{selected: selectedSize == image.key}" ng-cloak>
                                 <td ng-if="!isTpl"><input type="text" name="{{image.key}}[base]" value={{image.base}} readonly/></td>
+                                <td ng-if="isTpl"><input type="text" name="{{image.key}}[inputSuffix]" value={{image.inputSuffix}} readonly/></td>
                                 <td class="sizeSelect">
-                                    <p><span>width:</span><input type="number" name="{{image.key}}[width]" value="{{image.width}}" class="changeable" /></P>
-                                    <p><span>height:</span><input type="number" name="{{image.key}}[height]" value="{{image.height}}" class="changeable" /></p>
+                                    <p><span>width:</span><input type="number" name="{{image.key}}[width]" value="{{image.width}}" onclick="onChangeVariable(this)" onchange="onChangeVariable(this)" /></P>
+                                    <p><span>height:</span><input type="number" name="{{image.key}}[height]" value="{{image.height}}" onclick="onChangeVariable(this)" onchange="onChangeVariable(this)" /></p>
                                     <p><input type="checkbox" id="{{image.key}}_keepAsp" checked>fix aspect ratio</p>
                                 </td>
                                 <td>
@@ -38,11 +41,11 @@
                                     </p>
                                 </td>
                                 <td class="sizeSelect">
-                                    <p><span>X:</span><input type="number" name="{{image.key}}[x]" value={{image.center.x}} class="changeable" /></p>
-                                    <p><span>Y:</span><input type="number" name="{{image.key}}[y]" value={{image.center.y}} class="changeable" /></p>
+                                    <p><span>X:</span><input type="number" name="{{image.key}}[x]" value={{image.center.x}} onclick="onChangeVariable(this)" onchange="onChangeVariable(this)" /></p>
+                                    <p><span>Y:</span><input type="number" name="{{image.key}}[y]" value={{image.center.y}} onclick="onChangeVariable(this)" onchange="onChangeVariable(this)" /></p>
                                 </td>
                                 <td><input type="text" name="{{image.key}}[output]" value={{image.output}} /></td>
-                                <td><input type="text" name="{{image.key}}[option]" value={{image.option}} class="changeable"/></td>
+                                <td><input type="text" name="{{image.key}}[option]" value={{image.option}} onchange="onChangeVariable(this)" /></td>
                                 <td ng-if="!isTpl"><img ng-src={{image.url}} /><p><span>{{image.size}}</span></p></td>
                                 <td><button class="btn" type="button" ng-click="deleteSize(image.key)">delete</button></td>
                             </tr>
@@ -50,4 +53,4 @@
                     </table>
                 </form>
             </div>
-            <p class="btnAddSize"><button class="btn btn-primary" ng-click="addSize();">add new crop setting</button></p>
+            <p class="btnAddSize" ng-cloak><button class="btn btn-primary" ng-click="addSize();">add new crop setting</button></p>

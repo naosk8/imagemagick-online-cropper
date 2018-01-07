@@ -7,13 +7,13 @@ var express = require('express');
 var path = require('path');
 var http = require('http');
 var routes = {
-	index:  require('./routes/index.js'),
-	detail: require('./routes/detail.js'),
-	template: require('./routes/template.js'),
-	api: {
-		image: require('./routes/api/image.js'),
-		template: require('./routes/api/template.js')
-	}
+    index:  require('./routes/index.js'),
+    detail: require('./routes/detail.js'),
+    template: require('./routes/template.js'),
+    api: {
+        image: require('./routes/api/image.js'),
+        template: require('./routes/api/template.js')
+    }
 };
 
 var app = express();

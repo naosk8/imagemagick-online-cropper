@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
     var watchFiles = [
-        'json/trimdata.json',
+        'db/trim_setting.db',
     ];
 
     var pkg = grunt.file.readJSON('package.json');
@@ -15,12 +15,16 @@ module.exports = function(grunt) {
             json: {
                 'org':  'json',
                 'bkup': 'json/bkup'
+            },
+            db: {
+                'org':  'db',
+                'bkup': 'db/bkup'
             }
         },
 
         execute: {
             convert: {
-                src: ['script.js']
+                src: ['./scripts/grunt-crop.js']
             }
         },
 
@@ -30,12 +34,21 @@ module.exports = function(grunt) {
                 cwd: '<%= dir.json.org %>/',
                 src: ['trimdata.json'],
                 dest: '<%= dir.json.bkup %>/'
+            },
+            db: {
+                expand: true,
+                cwd: '<%= dir.db.org %>/',
+                src: ['trim_setting.db'],
+                dest: '<%= dir.db.bkup %>/'
             }
         },
 
         watch: {
             files: watchFiles,
-            tasks: ['execute:convert', 'copy']
+            tasks: ['execute:convert', 'copy'],
+            options: {
+                debounceDelay: 3000,
+            },
         },
 
         express: {
@@ -56,7 +69,7 @@ module.exports = function(grunt) {
             static: {
                 options: {
                     pngquant: true,
-                    optipng: true,
+                    optipng: false,
                     advpng: false,
                     zopflipng: false,
                     pngcrush: false,

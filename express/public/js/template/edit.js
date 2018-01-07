@@ -81,7 +81,7 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
 
 }]).controller('baseImageCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.isShow = function() {
-        return ($scope.imageList.length > 0) ? true : false;
+        return ($scope.imageList.length > 0 && initialized) ? true : false;
     };
     $scope.updateImageList = function(imageList) {
         if (imageList.length > 0) {
@@ -94,12 +94,20 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
             $scope.imageList[imageIndex].active = true;
         }
     };
+    $scope.updateBaseImageIndexByName = function(name) {
+        _.each($scope.imageList, function(image, i) {
+            if (image.name == name) {
+                $scope.updateBaseImageIndex(i);
+            }
+        });
+    };
     $scope.isSelected = function(image) {
         if (image.name == $scope.imageList[$scope.baseImageIndex].name) {
             return 'active';
         }
     };
 }]).controller('imageDataCtrl', ['$scope', function($scope) {
+    var baseImageCtrlScope = angular.element('#baseImageCtrl').scope();
     $scope.commitActionName = "/api/template/commit";
     $scope.isTpl = true;
     $scope.selectedSize = TYPE_SIZE_ALL;
@@ -110,9 +118,10 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
         $scope.selectedSize = TYPE_SIZE_ALL;
         selectedSize = TYPE_SIZE_ALL;
     };
-    $scope.setSelectedSize = function(size) {
+    $scope.setSelectedSize = function(size, name) {
         $scope.selectedSize = size;
         selectedSize = size;
+        baseImageCtrlScope.updateBaseImageIndexByName(name);
         setRect();
     };
     $scope.isShow = function() {
@@ -135,6 +144,9 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
         newImageData.key = String(newSizeKey);
         imageData[newSizeKey] = newImageData;
         $scope.imageData = imageData;
+        setTimeout(function(){
+            updateAllPreview();
+        }, 1000);
     };
     $scope.deleteSize = function(id) {
         delete imageData[id];
@@ -142,6 +154,11 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
     };
     init();
 }]);
+
+function onChangeVariable(src) {
+    updateImageDataByChange(src);
+    imageDataScope.$apply();
+}
 
 function ready(element) {
     return new Promise(function(resolve, reject) {
@@ -154,44 +171,44 @@ function ready(element) {
     });
 }
 
+
 var initialized = false;
+var imageDataScope;
 function init() {
     var baseImageElements;
     var p = initData();
     Promise.all([p])
-    .then(function(){
-        baseImageElements = document.querySelectorAll(".imgWrapper > img");
-        var promises = _.map(baseImageElements, function(elm) {
-            return ready(elm);
+    .then(function() {
+        return new Promise(function(resolve, reject) {
+            baseImageElements = document.querySelectorAll(".imgWrapper > img");
+            var promises = _.map(baseImageElements, function(elm) {
+                return ready(elm);
+            });
+            Promise.all(promises).then(function(){
+                resolve();
+            });
         });
-        return promises;
-    }).then(function resolve() {
-        var imageDataScope = angular.element('#imageDataCtrl').scope();
+    }).then(function() {
+        imageDataScope = angular.element('#imageDataCtrl').scope();
         imageDataScope.imageData = imageData;
         initCanvas();
 
-        // テーブル上で編集対象となるINPUT要素について変更監視を付加
-        var changeables = document.getElementsByClassName('changeable');
-        _.each(changeables, function(elm) {
-            elm.onchange = function(e) {
-                updateImageDataByChange(e);
-            };
-        });
+        initialized = true;
+        var scope = angular.element('#baseImageCtrl').scope();
+        scope.$apply();
         setTimeout(function(){
             // プレビューの初期表示処理
             updateAllPreview();
         },100);
-    }, function reject() {
-        console.log('画像データの読み込みに失敗');
     });
 };
 
 // inputタグ内のonchangeイベント用処理
-function updateImageDataByChange(e) {
+function updateImageDataByChange(src) {
     var size, key, orgVal, convertedVal, orgAspVal, convertedAspVal, checkBtn;
     size = selectedSize;
-    key = e.srcElement.name.replace(size+'[','').replace(']', '');
-    orgVal = e.srcElement.value;
+    key = src.name.replace(size+'[','').replace(']', '');
+    orgVal = src.value;
     // key によって、変更対象を変更する
     switch (key) {
         case 'option':
@@ -202,8 +219,8 @@ function updateImageDataByChange(e) {
             orgVal = Math.floor(orgVal);
             convertedVal = convertCenterPositionToClipPosition(size, key, orgVal);
             if (convertedVal == imageData[size][key]) {
-                e.srcElement.value = imageData[size][key] + imageData[size][xy_wh_relation[key]] / 2;
-                return;
+                src.value = imageData[size][key] + imageData[size][xy_wh_relation[key]] / 2;
+                break;
             }
             imageData[size][key] = convertedVal;
             break;
@@ -212,8 +229,8 @@ function updateImageDataByChange(e) {
             orgVal = Math.floor(orgVal);
             convertedVal = convertWidthAndHeight(size, key, orgVal);
             if (convertedVal == imageData[size][key]) {
-                e.srcElement.value = imageData[size][key];
-                return;
+                src.value = imageData[size][key];
+                break;
             }
             checkBtn = document.getElementById(size+'_keepAsp');
             if (checkBtn.checked) {
@@ -221,9 +238,9 @@ function updateImageDataByChange(e) {
                 orgAspVal = Math.round(orgVal * imageData[size]['asp'][wh_relation[key]] / imageData[size]['asp'][key]);
                 convertedAspVal = convertWidthAndHeight(size, wh_relation[key], orgAspVal);
                 if (convertedAspVal == imageData[size][wh_relation[key]]) {
-                    e.srcElement.value = imageData[size][key];
-                    //e.srcElement.parentNode.childlen[] imageData[size][wh_relation[key]];
-                    return;
+                    src.value = imageData[size][key];
+                    //src.parentNode.childlen[] imageData[size][wh_relation[key]];
+                    break;
                 }
                 imageData[size][wh_relation[key]] = convertedAspVal;
             }
@@ -238,13 +255,13 @@ function updateImageDataByChange(e) {
             });
             // 存在しない画像を選択した場合、元に戻す
             if (base.length === 0) {
-                e.srcElement.value = imageData[size].inputFileSuffix;
+                src.value = imageData[size].inputSuffix;
             }
             base = base.shift();
 
             // 切り出しデータの更新
             imageData[size].base = base.name;
-            imageData[size].inputFileSuffix = orgVal;
+            imageData[size].inputSuffix = orgVal;
             // 選択中の元画像を変更する
             var scope = angular.element('#baseImageCtrl').scope();
             scope.updateBaseImageIndex(base.index);
@@ -409,6 +426,8 @@ function initCanvas() {
 function setImageData(orgData)
 {
     _.each(orgData, function(data) {
+        // base画像名からinputSuffixをつける
+        data['inputSuffix'] = data['base'].replace('unit000022c','').replace('.png', '');
         // アスペクト比保持用の項目を追加
         data['asp'] = [];
         data['asp']['width'] = data['width'];
@@ -452,7 +471,7 @@ function initData()
                 setImageData(parsedRes.imageData);
                 mainScope.isInitialized = true;
             }
-            initialized = true;
+//            initialized = true;
             resolve();
         });
     });

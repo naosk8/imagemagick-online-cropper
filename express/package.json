@@ -1,14 +1,14 @@
 {
-  "name": "application-name",
+  "name": "express server for imagemagick cropper",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.5.1",
-    "formidable": "1.0.14",
-    "ect": "0.5.9",
-    "exec-sync": "0.1.6"
+    "ect": "^0.5.9",
+    "express": "^3.21.2",
+    "formidable": "^1.1.1",
+    "underscore": "^1.8.3"
   }
 }

@@ -1,17 +1,17 @@
 <% extend 'layout' %>
 <script type="text/javascript" src="/js/template/edit.js" ></script>
 <div ng-app="imageCropper" id="mainCtrl" ng-controller="mainCtrl">
-    <% include 'partial/header.ect' %>
+    <% include 'parts/header.ect' %>
     <div class="mainPanel">
         <div class="leftPanel">
-            <% include 'partial/target.ect' %>
+            <% include 'parts/target.ect' %>
         </div>
         <div class="rightPanel" id="imageDataCtrl" ng-controller="imageDataCtrl" ng-show="isShow()">
-            <% include 'partial/crop.ect' %>
+            <% include 'parts/crop.ect' %>
         </div>
         <div class="xy">
             (<span id="onmouseX"></span>, <span id="onmouseY"></span>)
         </div>
     </div>
-    <% include 'partial/modal.ect' %>
+    <% include 'parts/modal.ect' %>
 </div>

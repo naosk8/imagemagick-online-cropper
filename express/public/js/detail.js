@@ -104,6 +104,13 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
             $scope.imageList[imageIndex].active = true;
         }
     };
+    $scope.updateBaseImageIndexByName = function(name) {
+        _.each($scope.imageList, function(image, i) {
+            if (image.name == name) {
+                $scope.updateBaseImageIndex(i);
+            }
+        });
+    };
     $scope.isSelected = function(image) {
         if (image.name == $scope.imageList[$scope.baseImageIndex].name) {
             return 'active';
@@ -141,6 +148,7 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
         });
     };
 }]).controller('imageDataCtrl', ['$scope', function($scope) {
+    var baseImageCtrlScope = angular.element('#baseImageCtrl').scope();
     $scope.commitActionName = "/api/image/commit";
     $scope.isTpl = false;
     $scope.selectedSize = TYPE_SIZE_ALL;
@@ -151,9 +159,10 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
         $scope.selectedSize = TYPE_SIZE_ALL;
         selectedSize = TYPE_SIZE_ALL;
     };
-    $scope.setSelectedSize = function(size) {
+    $scope.setSelectedSize = function(size, name) {
         $scope.selectedSize = size;
         selectedSize = size;
+        baseImageCtrlScope.updateBaseImageIndexByName(name);
         setRect();
     };
     $scope.isShow = function() {
@@ -176,12 +185,24 @@ app.controller('mainCtrl', ['$scope', '$http', '$modal', function($scope, $http,
         newImageData.key = String(newSizeKey);
         imageData[newSizeKey] = newImageData;
         $scope.imageData = imageData;
+        setTimeout(function(){
+            updateAllPreview();
+        }, 1000);
     };
     $scope.deleteSize = function(id) {
         delete imageData[id];
         $scope.imageData = imageData;
     };
-    init();
+
+    init()
+    .then(function() {
+        if ($scope.imageData != null && Object.keys($scope.imageData).length > 0) {
+            setTimeout(function() {
+                $scope.setSelectedSize($scope.imageData[0].key, $scope.imageData[0].name);
+                $scope.$apply();
+            }, 200);
+        }
+    });
 }]);
 
 function ready(element) {
@@ -195,63 +216,59 @@ function ready(element) {
     });
 }
 
+function onChangeVariable(src) {
+    updateImageDataByChange(src);
+    imageDataScope.$apply();
+}
+
 var initialized = false;
+var imageDataScope;
 function init() {
     var baseImageElements;
     var p = initData();
     // 全てのベース画像の読み込み後に後続処理を実行する
-    Promise.all([p])
+    return Promise.all([p])
     .then(function(){
         baseImageElements = document.querySelectorAll(".imgWrapper > img");
         var promises = _.map(baseImageElements, function(elm) {
             return ready(elm);
         });
-        return promises;
-    }).then(function resolve() {
-        var imageDataScope = angular.element('#imageDataCtrl').scope();
-        imageDataScope.imageData = imageData;
-        initCanvas();
-
-        // テーブル上で編集対象となるINPUT要素について変更監視を付加
-        var changeables = document.getElementsByClassName('changeable');
-        _.each(changeables, function(elm) {
-            elm.onchange = function(e) {
-                updateImageDataByChange(e);
-            };
+        return Promise.all(promises);
+    }).then(function() {
+        return new Promise(function(resolve, reject) {
+            imageDataScope = angular.element('#imageDataCtrl').scope();
+            imageDataScope.imageData = imageData;
+            initCanvas();
+            // 画像アップロード関連の処理
+            $('input[type=file]').change(function() {
+                var file = $(this).prop('files')[0];
+                // 画像以外は処理を停止
+                if (! file.type.match('image.*')) {
+                    $('span').html('');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function() {
+                    var uploadImage = document.getElementById('uploadPreview');
+                    uploadImage.src = reader.result;
+                }
+                reader.readAsDataURL(file);
+            });
+            setTimeout(function(){
+                // プレビューの初期表示処理
+                updateAllPreview();
+                resolve();
+            }, 100);
         });
-        setTimeout(function(){
-            // プレビューの初期表示処理
-            updateAllPreview();
-        },100);
-    }, function reject() {
-        console.log('画像データの読み込みに失敗');
-    });
-
-    // 画像アップロード関連の処理
-    $('input[type=file]').change(function() {
-        var file = $(this).prop('files')[0];
-        // 画像以外は処理を停止
-        if (! file.type.match('image.*')) {
-            $('span').html('');
-            return;
-        }
-        var reader = new FileReader();
-        /*
-        reader.onload = function() {
-            var uploadImage = document.getElementById('uploadPreview');
-            uploadImage.src = reader.result;
-        }
-        */
-        reader.readAsDataURL(file);
     });
 };
 
 // inputタグ内のonchangeイベント用処理
-function updateImageDataByChange(e) {
+function updateImageDataByChange(src) {
     var size, key, orgVal, convertedVal, orgAspVal, convertedAspVal, checkBtn;
     size = selectedSize;
-    key = e.srcElement.name.replace(size+'[','').replace(']', '');
-    orgVal = e.srcElement.value;
+    key = src.name.replace(size+'[','').replace(']', '');
+    orgVal = src.value;
     // key によって、変更対象を変更する
     switch (key) {
         case 'option':
@@ -262,8 +279,8 @@ function updateImageDataByChange(e) {
             orgVal = Math.floor(orgVal);
             convertedVal = convertCenterPositionToClipPosition(size, key, orgVal);
             if (convertedVal == imageData[size][key]) {
-                e.srcElement.value = imageData[size][key] + imageData[size][xy_wh_relation[key]] / 2;
-                return;
+                src.value = imageData[size][key] + imageData[size][xy_wh_relation[key]] / 2;
+                break;
             }
             imageData[size][key] = convertedVal;
             break;
@@ -271,19 +288,21 @@ function updateImageDataByChange(e) {
         case 'height':
             orgVal = Math.floor(orgVal);
             convertedVal = convertWidthAndHeight(size, key, orgVal);
+console.log(convertedVal, orgVal);
             if (convertedVal == imageData[size][key]) {
-                e.srcElement.value = imageData[size][key];
-                return;
+                src.value = imageData[size][key];
+                break;
             }
             checkBtn = document.getElementById(size+'_keepAsp');
             if (checkBtn.checked) {
                 // アスペクト比保持の場合の補正
                 orgAspVal = Math.round(orgVal * imageData[size]['asp'][wh_relation[key]] / imageData[size]['asp'][key]);
                 convertedAspVal = convertWidthAndHeight(size, wh_relation[key], orgAspVal);
+console.log(convertedAspVal, imageData[size], orgVal);
                 if (convertedAspVal == imageData[size][wh_relation[key]]) {
-                    e.srcElement.value = imageData[size][key];
-                    //e.srcElement.parentNode.childlen[] imageData[size][wh_relation[key]];
-                    return;
+                    src.value = imageData[size][key];
+                    //src.parentNode.childlen[] imageData[size][wh_relation[key]];
+                    break;
                 }
                 imageData[size][wh_relation[key]] = convertedAspVal;
             }
@@ -314,6 +333,9 @@ function setRect() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     var rectBaseObject = (imageData[selectedSize]) ? imageData[selectedSize] : imageData[0];
     if (rectBaseObject) {
+        ctx.lineWidth = "5";
+        ctx.strokeStyle = "rgb(0, 157, 191)";
+        ctx.globalAlpha = 0.8;
         ctx.strokeRect(
             rectBaseObject.x * baseImage.scale,
             rectBaseObject.y * baseImage.scale,
@@ -372,6 +394,7 @@ function initCanvas() {
         baseImageList[i].scale = scale;
         baseImageList[i].width = parseInt(canvas.width * scale, 10);
         baseImageList[i].height = parseInt(canvas.height * scale, 10);
+        baseImageList[i].ready = true;
         scope.updateImageList(baseImageList);
         scope.$apply(); // imageListの更新をscope外から実施するため。
 
@@ -411,6 +434,7 @@ function initCanvas() {
         canvas.onmouseup = function(e) {
             isDragging = false;
             setImagePosition(e);
+            setRect();
             scope.$apply(); // imageListの更新をscope外から実施するため。
         };
     });

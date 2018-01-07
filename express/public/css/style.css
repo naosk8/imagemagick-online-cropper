@@ -45,6 +45,7 @@ body > div {
 
 .imgWrapper {
     position: relative;
+    width: 100%;
 }
 .imgWrapper canvas {
     position: absolute;
@@ -53,7 +54,7 @@ body > div {
 .imgWrapper img {
     z-index: -1;
     top: 0px;
-    border: 2px #000000 solid;
+    border: 1px rgba(0, 0, 0, 0.3) solid;
 }
 div#imageUploader {
     position: static;
@@ -132,6 +133,9 @@ tbody tr th {
     text-align: right;
     font-weight: normal;
     text-transform: uppercase;
+}
+.nav-tabs {
+    border-bottom: none;
 }
 .navbar-form .form-control {
     width: 300px;
